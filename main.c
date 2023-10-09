@@ -452,6 +452,7 @@ void TransferenciaEntreContas() {
 
 
 int main(){
+    printf("ola");
     // Inicialize as listas e execute o loop principal aqui.
     while (1) {
         printf("1: Novo cliente\n");
