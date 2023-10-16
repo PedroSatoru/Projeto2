@@ -19,7 +19,7 @@ char* get_current_time() {
 
     return buffer;
 }
-
+bb
 
 struct Cliente {
     char nome[100];
