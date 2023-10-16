@@ -350,11 +350,8 @@ void Extrato() {
 
 
 void TransferenciaEntreContas() {
-    struct Cliente lista_clientes[100]; // Suponhamos que você tenha até 100 clientes
-    int quantidade_clientes = 0;
-
-    // Lê os clientes do arquivo
-    ler_clientes(lista_clientes, &quantidade_clientes);
+    ler_clientes();
+    ler_extrato();
 
     char cpf_origem[15];
     char senha_origem[20];
@@ -370,89 +367,75 @@ void TransferenciaEntreContas() {
     printf("Digite o valor a ser transferido: ");
     scanf("%lf", &valor);
 
-    int cliente_origem_index = -1;
-    int cliente_destino_index = -1;
+    int origem_encontrado = 0;
+    int destino_encontrado = 0;
+    int origem_index = -1;
+    int destino_index = -1;
 
     // Encontrar o cliente de origem e o cliente de destino na lista de clientes
     for (int i = 0; i < quantidade_clientes; i++) {
         if (strcmp(lista_clientes[i].cpf, cpf_origem) == 0 && strcmp(lista_clientes[i].senha, senha_origem) == 0) {
-            cliente_origem_index = i;
+            origem_encontrado = 1;
+            origem_index = i;
         }
         if (strcmp(lista_clientes[i].cpf, cpf_destino) == 0) {
-            cliente_destino_index = i;
+            destino_encontrado = 1;
+            destino_index = i;
         }
     }
 
-    if (cliente_origem_index != -1 && cliente_destino_index != -1) {
-        if (strcmp(lista_clientes[cliente_origem_index].tipo_conta, "plus") == 0) {
-            // Conta Plus com taxa de 3%
-            double taxa = valor * 0.03;
-            if (lista_clientes[cliente_origem_index].saldo - valor - taxa >= -5000.0) {
-                lista_clientes[cliente_origem_index].saldo -= valor + taxa;
-                lista_clientes[cliente_destino_index].saldo += valor;
-                printf("Transferência realizada com sucesso\n");
+    if (!origem_encontrado) {
+        printf("Cliente de origem não encontrado ou senha incorreta.\n");
+    } else if (!destino_encontrado) {
+        printf("Cliente de destino não encontrado.\n");
+    } else {
+        double taxa = 0.03 * valor;
+        double saldo_origem = lista_clientes[origem_index].saldo;
+        if (strcmp(lista_clientes[origem_index].tipo_conta, "plus") == 0) {
+            if (saldo_origem - valor - taxa >= -5000.0) {
+                lista_clientes[origem_index].saldo = saldo_origem - valor - taxa;
+                lista_clientes[destino_index].saldo += valor;
+                printf("Transferência realizada com sucesso.\n");
 
-                // Registrar a transação no extrato da origem
-                char transacao_origem[100];
-                snprintf(transacao_origem, sizeof(transacao_origem), "%.19s - Transferência para %s: %.2lf (Tarifa: %.2lf) Saldo: %.2lf!\n", get_current_time(), cpf_destino, valor, taxa, lista_clientes[cliente_origem_index].saldo);
-
-                // Registrar a transação no extrato do destino
-                char transacao_destino[100];
-                snprintf(transacao_destino, sizeof(transacao_destino), "%.19s + Transferência de %s: %.2lf Saldo: %.2lf!\n", get_current_time(), cpf_origem, valor, lista_clientes[cliente_destino_index].saldo);
-
-                // Você pode imprimir as transações ou salvá-las em registros de extrato, se necessário.
-                printf("Transações registradas:\n%s%s", transacao_origem, transacao_destino);
-
-                // Salvar os clientes atualizados no arquivo
-                salvar_clientes(lista_clientes, quantidade_clientes);
-                return;
+                // Registrar as transações no extrato de origem e destino
+                char transacao[100];
+                snprintf(transacao, sizeof(transacao), "%.19s - Transferência para %s (Valor: %.2lf, Tarifa: %.2lf, Saldo: %.2lf)\n", get_current_time(), lista_clientes[destino_index].nome, valor, taxa, lista_clientes[origem_index].saldo);
+                strcat(lista_extrato[origem_index].extrato, transacao);
+                snprintf(transacao, sizeof(transacao), "%.19s - Transferência de %s (Valor: %.2lf, Saldo: %.2lf)\n", get_current_time(), lista_clientes[origem_index].nome, valor, lista_clientes[destino_index].saldo);
+                strcat(lista_extrato[destino_index].extrato, transacao);
+                salva_extrato();
+                salvar_clientes();
             } else {
-                printf("Saldo insuficiente (limite de crédito excedido)\n");
+                printf("Saldo insuficiente (limite de crédito excedido).\n");
             }
-        } else if (strcmp(lista_clientes[cliente_origem_index].tipo_conta, "comum") == 0) {
-            // Conta Comum com taxa de 5%
-            double taxa = valor * 0.05;
-            if (lista_clientes[cliente_origem_index].saldo - valor - taxa >= -1000.0) {
-                lista_clientes[cliente_origem_index].saldo -= valor + taxa;
-                lista_clientes[cliente_destino_index].saldo += valor;
-                printf("Transferência realizada com sucesso\n");
+        } else if (strcmp(lista_clientes[origem_index].tipo_conta, "comum") == 0) {
+            if (saldo_origem - valor - taxa >= -1000.0) {
+                lista_clientes[origem_index].saldo = saldo_origem - valor - taxa;
+                lista_clientes[destino_index].saldo += valor;
+                printf("Transferência realizada com sucesso.\n");
 
-                // Registrar a transação no extrato da origem
-                char transacao_origem[100];
-                snprintf(transacao_origem, sizeof(transacao_origem),
-                         "%.19s - Transferência para %s: %.2lf (Tarifa: %.2lf) Saldo: %.2lf!\n", get_current_time(),
-                         cpf_destino, valor, taxa, lista_clientes[cliente_origem_index].saldo);
-
-                // Registrar a transação no extrato do destino
-                char transacao_destino[100];
-                snprintf(transacao_destino, sizeof(transacao_destino),
-                         "%.19s + Transferência de %s: %.2lf Saldo: %.2lf!\n", get_current_time(), cpf_origem, valor,
-                         lista_clientes[cliente_destino_index].saldo);
-
-                // Você pode imprimir as transações ou salvá-las em registros de extrato, se necessário.
-                printf("Transações registradas:\n%s%s", transacao_origem, transacao_destino);
-
-                // Salvar os clientes atualizados no arquivo
-
-            }else {
-                printf("Saldo insuficiente (limite de crédito excedido)\n");
+                // Registrar as transações no extrato de origem e destino
+                char transacao[100];
+                snprintf(transacao, sizeof(transacao), "%.19s - Transferência para %s (Valor: %.2lf, Tarifa: %.2lf, Saldo: %.2lf)\n", get_current_time(), lista_clientes[destino_index].nome, valor, taxa, lista_clientes[origem_index].saldo);
+                strcat(lista_extrato[origem_index].extrato, transacao);
+                snprintf(transacao, sizeof(transacao), "%.19s - Transferência de %s (Valor: %.2lf, Saldo: %.2lf)\n", get_current_time(), lista_clientes[origem_index].nome, valor, lista_clientes[destino_index].saldo);
+                strcat(lista_extrato[destino_index].extrato, transacao);
+                salva_extrato();
+                salvar_clientes();
+            } else {
+                printf("Saldo insuficiente (limite de crédito excedido).\n");
             }
         } else {
-            printf("Tipo de conta da conta de origem inválido\n");
+            printf("Tipo de conta de origem inválido.\n");
         }
-    } else {
-        printf("Senha, CPF de origem ou CPF de destino incorretos\n");
     }
-    salvar_clientes(lista_clientes, quantidade_clientes);
-    return;
 }
 
-
-
+// Resto do seu código
 
 
 int main(){
-    printf("ola");
+
     // Inicialize as listas e execute o loop principal aqui.
     while (1) {
         printf("1: Novo cliente\n");
