@@ -22,9 +22,16 @@ struct Extrato {
 };
 
 
-
-
 char* get_current_time();
+
+void ler_clientes();
+
+void salvar_clientes();
+
+void ler_extrato();
+
+void salva_extrato();
+
 
 
 #endif //PROJETO2_BIBLIOTECA_H
