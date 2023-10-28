@@ -22,6 +22,8 @@ struct Extrato {
 };
 
 
+
+
 char* get_current_time();
 
 void ler_clientes();
@@ -32,6 +34,18 @@ void ler_extrato();
 
 void salva_extrato();
 
+void NovoCliente();
 
+void ApagaCliente();
+
+void ListarClientes();
+
+void Debito();
+
+void Deposito();
+
+void Extrato();
+
+void TransferenciaEntreContas();
 
 #endif //PROJETO2_BIBLIOTECA_H
