@@ -47,7 +47,7 @@ int main(){
                 printf("Você saiu. Volte sempre!\n");
                 return 0;
             default:
-                printf("Opção inválida\n");
+                printf("Opcao invalida\n");
         }
     }
 

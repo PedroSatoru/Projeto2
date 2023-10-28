@@ -118,7 +118,7 @@ void NovoCliente() {
     for (int i = 0; i < quantidade_clientes; i++) {
         if (strcmp(lista_clientes[i].cpf, cpf) == 0) {
             cliente_encontrado = 1;
-            printf("Cliente já existe\n");
+            printf("Cliente ja existe\n");
             break;
         }
     }
