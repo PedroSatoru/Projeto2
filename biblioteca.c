@@ -353,5 +353,33 @@ void Deposito() {
     }
 }
 
+void Extrato() {
+    char cpf[15];
+    char senha[20];
+
+    printf("Digite seu CPF: ");
+    scanf("%s", cpf);
+    printf("Digite sua senha: ");
+    scanf("%s", senha);
+
+    for (int i = 0; i < quantidade_clientes; i++) {
+        if (strcmp(lista_clientes[i].cpf, cpf) == 0 && strcmp(lista_clientes[i].senha, senha) == 0) {
+            printf("Nome: %s\n", lista_extrato[i].nome);
+            printf("Tipo da conta: %s\n", lista_extrato[i].tipo_conta);
+
+            // Imprimir o extrato linha por linha
+            char* token = strtok(lista_extrato[i].extrato, "!");
+            while (token != NULL) {
+                printf("%s\n", token);
+                token = strtok(NULL, "!");
+            }
+
+            printf("\n");
+            return;
+        }
+    }
+
+    printf("Senha ou CPF incorretos\n");
+}
 
 
