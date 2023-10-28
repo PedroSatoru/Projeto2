@@ -382,4 +382,85 @@ void Extrato() {
     printf("Senha ou CPF incorretos\n");
 }
 
+void TransferenciaEntreContas() {
+    ler_clientes();
+    ler_extrato();
+
+    char cpf_origem[15];
+    char senha_origem[20];
+    char cpf_destino[15];
+    double valor;
+
+    printf("Digite seu CPF: ");
+    scanf("%s", cpf_origem);
+    printf("Digite sua senha: ");
+    scanf("%s", senha_origem);
+    printf("Digite o CPF do destinatário: ");
+    scanf("%s", cpf_destino);
+    printf("Digite o valor a ser transferido: ");
+    scanf("%lf", &valor);
+
+    int origem_encontrado = 0;
+    int destino_encontrado = 0;
+    int origem_index = -1;
+    int destino_index = -1;
+
+    // Encontrar o cliente de origem e o cliente de destino na lista de clientes
+    for (int i = 0; i < quantidade_clientes; i++) {
+        if (strcmp(lista_clientes[i].cpf, cpf_origem) == 0 && strcmp(lista_clientes[i].senha, senha_origem) == 0) {
+            origem_encontrado = 1;
+            origem_index = i;
+        }
+        if (strcmp(lista_clientes[i].cpf, cpf_destino) == 0) {
+            destino_encontrado = 1;
+            destino_index = i;
+        }
+    }
+
+    if (!origem_encontrado) {
+        printf("Cliente de origem não encontrado ou senha incorreta.\n");
+    } else if (!destino_encontrado) {
+        printf("Cliente de destino não encontrado.\n");
+    } else {
+        double taxa = 0.03 * valor;
+        double saldo_origem = lista_clientes[origem_index].saldo;
+        if (strcmp(lista_clientes[origem_index].tipo_conta, "plus") == 0) {
+            if (saldo_origem - valor - taxa >= -5000.0) {
+                lista_clientes[origem_index].saldo = saldo_origem - valor - taxa;
+                lista_clientes[destino_index].saldo += valor;
+                printf("Transferência realizada com sucesso.\n");
+
+                // Registrar as transações no extrato de origem e destino
+                char transacao[100];
+                snprintf(transacao, sizeof(transacao), "%.19s - Transferência para %s (Valor: %.2lf, Tarifa: %.2lf, Saldo: %.2lf)\n", get_current_time(), lista_clientes[destino_index].nome, valor, taxa, lista_clientes[origem_index].saldo);
+                strcat(lista_extrato[origem_index].extrato, transacao);
+                snprintf(transacao, sizeof(transacao), "%.19s - Transferência de %s (Valor: %.2lf, Saldo: %.2lf)\n", get_current_time(), lista_clientes[origem_index].nome, valor, lista_clientes[destino_index].saldo);
+                strcat(lista_extrato[destino_index].extrato, transacao);
+                salva_extrato();
+                salvar_clientes();
+            } else {
+                printf("Saldo insuficiente (limite de crédito excedido).\n");
+            }
+        } else if (strcmp(lista_clientes[origem_index].tipo_conta, "comum") == 0) {
+            if (saldo_origem - valor - taxa >= -1000.0) {
+                lista_clientes[origem_index].saldo = saldo_origem - valor - taxa;
+                lista_clientes[destino_index].saldo += valor;
+                printf("Transferência realizada com sucesso.\n");
+
+                // Registrar as transações no extrato de origem e destino
+                char transacao[100];
+                snprintf(transacao, sizeof(transacao), "%.19s - Transferência para %s (Valor: %.2lf, Tarifa: %.2lf, Saldo: %.2lf)\n", get_current_time(), lista_clientes[destino_index].nome, valor, taxa, lista_clientes[origem_index].saldo);
+                strcat(lista_extrato[origem_index].extrato, transacao);
+                snprintf(transacao, sizeof(transacao), "%.19s - Transferência de %s (Valor: %.2lf, Saldo: %.2lf)\n", get_current_time(), lista_clientes[origem_index].nome, valor, lista_clientes[destino_index].saldo);
+                strcat(lista_extrato[destino_index].extrato, transacao);
+                salva_extrato();
+                salvar_clientes();
+            } else {
+                printf("Saldo insuficiente (limite de crédito excedido).\n");
+            }
+        } else {
+            printf("Tipo de conta de origem inválido.\n");
+        }
+    }
+}
 
