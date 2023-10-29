@@ -18,8 +18,8 @@
 ///////////////////IMPORTANTE///////////////
 
 
-struct Cliente lista_clientes[100];
-struct Extrato lista_extrato[100];
+struct Cliente lista_clientes[1000];
+struct Extrato lista_extrato[1000];
 
 int quantidade_clientes = 0;
 int quantidade_extrato = 0;
