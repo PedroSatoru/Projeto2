@@ -33,13 +33,13 @@ char* get_current_time() {
 }
 
 void ler_clientes() {
-    FILE *arquivo = fopen("clientes.dat", "rb"); // Abra o arquivo em modo binário de leitura.
+    FILE *arquivo = fopen("clientes.dat", "rb"); // Abre o arquivo em modo binário de leitura.
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         exit(1);
     }
 
-    quantidade_clientes = 0;  // Reinicialize a quantidade de clientes
+    quantidade_clientes = 0;  // Reinicializa a quantidade de clientes
 
     while (fread(&lista_clientes[quantidade_clientes], sizeof(struct Cliente), 1, arquivo) == 1) {
         quantidade_clientes++;
@@ -49,7 +49,7 @@ void ler_clientes() {
 }
 
 void salvar_clientes() {
-    FILE *arquivo = fopen("clientes.dat", "wb"); // Abra o arquivo em modo binário de escrita.
+    FILE *arquivo = fopen("clientes.dat", "wb"); // Abre o arquivo em modo binário de escrita.
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         exit(1);
@@ -63,13 +63,13 @@ void salvar_clientes() {
 }
 
 void ler_extrato() {
-    FILE *arquivo = fopen("extrato.dat", "rb"); // Abra o arquivo de extrato em modo binário de leitura.
+    FILE *arquivo = fopen("extrato.dat", "rb"); // Abre o arquivo de extrato em modo binário de leitura.
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo de extrato.\n");
         exit(1);
     }
 
-    quantidade_extrato = 0;  // Reinicialize a quantidade de extratos
+    quantidade_extrato = 0;  // Reinicializa a quantidade de extratos
 
     while (fread(&lista_extrato[quantidade_extrato], sizeof(struct Extrato), 1, arquivo) == 1) {
         quantidade_extrato++;
@@ -79,7 +79,7 @@ void ler_extrato() {
 }
 
 void salva_extrato() {
-    FILE *arquivo = fopen("extrato.dat", "wb"); // Abra o arquivo de extrato em modo binário de escrita.
+    FILE *arquivo = fopen("extrato.dat", "wb"); // Abre o arquivo de extrato em modo binário de escrita.
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo de extrato.\n");
         exit(1);
@@ -158,7 +158,7 @@ void ApagaCliente() {
         if (strcmp(lista_clientes[i].cpf, cpf) == 0) {
             cliente_encontrado = 1;
 
-            // Remova o cliente da lista de clientes
+            // Remove o cliente da lista de clientes
             for (int j = i; j < quantidade_clientes - 1; j++) {
                 strcpy(lista_clientes[j].nome, lista_clientes[j + 1].nome);
                 strcpy(lista_clientes[j].cpf, lista_clientes[j + 1].cpf);
@@ -168,7 +168,7 @@ void ApagaCliente() {
             }
             quantidade_clientes--;
 
-            // Remova os registros do extrato associados ao cliente
+            // Remove os registros do extrato associados ao cliente
             for (int j = 0; j < quantidade_extrato; j++) {
                 if (strcmp(lista_extrato[j].cpf, cpf) == 0) {
                     for (int k = j; k < quantidade_extrato - 1; k++) {
@@ -257,7 +257,7 @@ void Debito() {
                     // Salvar o extrato atualizado
                     salva_extrato();
                 } else {
-                    // Caso não encontre o índice no extrato, você pode optar por tratá-lo aqui
+                    // Caso não encontre o índice no extrato
                     printf("Erro ao encontrar o índice do extrato para o cliente.\n");
                 }
                 // Salvar os clientes atualizados
@@ -272,14 +272,14 @@ void Debito() {
                 printf("Valor debitado com sucesso\n");
 
                 if (indice_extrato != -1) {
-                    // Registrar a transação no extrato do cliente
+                    // Registra a transação no extrato do cliente
                     char transacao[100];
                     snprintf(transacao, sizeof(transacao), "%.19s - Débito: %.2lf (Tarifa: %.2lf) Saldo: %.2lf\n", get_current_time(), valor, taxa, lista_clientes[indice_cliente].saldo);
                     strcat(lista_extrato[indice_extrato].extrato, transacao);
-                    // Salvar o extrato atualizado
+                    // Salva o extrato atualizado
                     salva_extrato();
                 } else {
-                    // Caso não encontre o índice no extrato, você pode optar por tratá-lo aqui
+                    // Caso não encontre o índice no extrato
                     printf("Erro ao encontrar o índice do extrato para o cliente.\n");
                 }
                 // Salvar os clientes atualizados
@@ -313,13 +313,11 @@ void Deposito() {
     int indice_cliente = -1;
     int indice_extrato = -1;
 
-    // Encontrar o cliente e o respectivo índice
     for (int i = 0; i < quantidade_clientes; i++) {
         if (strcmp(lista_clientes[i].cpf, cpf) == 0 && strcmp(lista_clientes[i].senha, senha) == 0) {
             cliente_encontrado = 1;
             indice_cliente = i;
 
-            // Encontrar o índice correspondente no extrato
             for (int j = 0; j < quantidade_extrato; j++) {
                 if (strcmp(lista_extrato[j].cpf, cpf) == 0) {
                     indice_extrato = j;
@@ -345,7 +343,7 @@ void Deposito() {
             // Salvar os clientes atualizados
             salvar_clientes();
         } else {
-            // Caso não encontre o índice no extrato, você pode optar por tratá-lo aqui
+            // Caso não encontre o índice no extrato
             printf("Erro ao encontrar o índice do extrato para o cliente.\n");
         }
     } else {

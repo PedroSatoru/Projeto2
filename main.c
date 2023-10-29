@@ -3,9 +3,7 @@
 
 
 int main(){
-
-
-    // Inicialize as listas e execute o loop principal aqui.
+    // Inicializa as listas e executa o loop principal.
     while (1) {
         printf("1: Novo cliente\n");
         printf("2: Apaga cliente\n");
@@ -50,6 +48,4 @@ int main(){
                 printf("Opcao invalida\n");
         }
     }
-
-
 }
