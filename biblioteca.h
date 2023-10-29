@@ -5,6 +5,15 @@
 #ifndef PROJETO2_BIBLIOTECA_H
 #define PROJETO2_BIBLIOTECA_H
 
+///////////////////IMPORTANTE///////////////
+
+
+//Criar as listas "clientes.dat" e "extrato.dat", possivel que não se crie ao iniciar pela primeira vez o codigo e ocorra um erro
+
+
+
+///////////////////IMPORTANTE///////////////
+
 
 struct Cliente {
     char nome[100];

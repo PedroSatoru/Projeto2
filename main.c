@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include "biblioteca.h"
 
+///////////////////IMPORTANTE///////////////
+
+
+//Criar as listas "clientes.dat" e "extrato.dat", possivel que não se crie ao iniciar pela primeira vez o codigo e ocorra um erro
+
+
+
+///////////////////IMPORTANTE///////////////
 
 int main(){
     // Inicializa as listas e executa o loop principal.
