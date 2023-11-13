@@ -11,6 +11,12 @@
 ///////////////////IMPORTANTE///////////////
 
 int main(){
+
+    // Declaração das variáveis locais
+    struct Cliente lista_clientes[1000];
+    struct Extrato lista_extrato[1000];
+    int quantidade_clientes = 0;
+    int quantidade_extrato = 0;
     // Inicializa as listas e executa o loop principal.
     while (1) {
         printf("1: Novo cliente\n");
@@ -24,33 +30,33 @@ int main(){
         printf("9: Relistar as opcoes\n");
 
         int op;
-        printf("Digite a opção: ");
+        printf("Digite a opcao: ");
         scanf("%d", &op);
 
         switch (op) {
             case 1:
-                NovoCliente();
+                NovoCliente( lista_clientes, &quantidade_clientes, lista_extrato, &quantidade_extrato);
                 break;
             case 2:
-                ApagaCliente();
+                ApagaCliente(lista_clientes, &quantidade_clientes, lista_extrato, &quantidade_extrato);
                 break;
             case 3:
-                ListarClientes();
+                ListarClientes(lista_clientes, quantidade_clientes);
                 break;
             case 4:
-                Debito();
+                Debito(lista_clientes, quantidade_clientes, lista_extrato, quantidade_extrato);
                 break;
             case 5:
-                Deposito();
+                Deposito(lista_clientes, quantidade_clientes, lista_extrato, quantidade_extrato);
                 break;
             case 6:
-                Extrato();
+                Extrato(lista_clientes, quantidade_clientes, lista_extrato, quantidade_extrato);
                 break;
             case 7:
-                TransferenciaEntreContas();
+                TransferenciaEntreContas(lista_clientes, quantidade_clientes, lista_extrato, quantidade_extrato);
                 break;
             case 8:
-                printf("Você saiu. Volte sempre!\n");
+                printf("Voce saiu. Volte sempre!\n");
                 return 0;
             default:
                 printf("Opcao invalida\n");
