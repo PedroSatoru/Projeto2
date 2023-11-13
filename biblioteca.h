@@ -33,28 +33,26 @@ struct Extrato {
 
 
 
-char* get_current_time();
+void ler_clientes(struct Cliente* lista_clientes, int* quantidade_clientes);
 
-void ler_clientes();
+void salvar_clientes(struct Cliente* lista_clientes, int quantidade_clientes);
 
-void salvar_clientes();
+void ler_extrato(struct Extrato* lista_extrato, int* quantidade_extrato);
 
-void ler_extrato();
+void salva_extrato(struct Extrato* lista_extrato, int quantidade_extrato);
 
-void salva_extrato();
+void NovoCliente(struct Cliente* lista_clientes, int* quantidade_clientes, struct Extrato* lista_extrato, int* quantidade_extrato);
 
-void NovoCliente();
+void ApagaCliente(struct Cliente* lista_clientes, int* quantidade_clientes, struct Extrato* lista_extrato, int* quantidade_extrato);
 
-void ApagaCliente();
+void ListarClientes(struct Cliente* lista_clientes, int quantidade_clientes);
 
-void ListarClientes();
+void Debito(struct Cliente* lista_clientes, int quantidade_clientes, struct Extrato* lista_extrato, int quantidade_extrato);
 
-void Debito();
+void Deposito(struct Cliente* lista_clientes, int quantidade_clientes, struct Extrato* lista_extrato, int quantidade_extrato);
 
-void Deposito();
+void Extrato(struct Cliente* lista_clientes, int quantidade_clientes, struct Extrato* lista_extrato, int quantidade_extrato);
 
-void Extrato();
-
-void TransferenciaEntreContas();
+void TransferenciaEntreContas(struct Cliente* lista_clientes, int quantidade_clientes, struct Extrato* lista_extrato, int quantidade_extrato);
 
 #endif //PROJETO2_BIBLIOTECA_H
